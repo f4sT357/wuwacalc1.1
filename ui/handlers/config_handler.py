@@ -67,7 +67,7 @@ class ConfigHandler(BaseHandler):
         self.config_manager.update_app_setting('crop_mode', mode)
         self.save_config()
         self.ui.image_label.set_drag_enabled(mode == "drag")
-        self.ui.btn_apply_crop.setVisible(mode == "drag")
+        self.ui.update_ui_mode()
         
         # In percent mode, show the preview box
         if mode == "percent":

@@ -91,6 +91,9 @@ class EventHandlers:
         self.ui.cb_auto_main.toggled.connect(self.config_handler.on_auto_main_change)
         self.ui.rb_batch.toggled.connect(lambda c: self.config_handler.on_score_mode_change("batch") if c else None)
         self.ui.rb_single.toggled.connect(lambda c: self.config_handler.on_score_mode_change("single") if c else None)
+        self.ui.cb_auto_calculate.toggled.connect(self.on_auto_calculate_change)
+        self.ui.rb_crop_drag.toggled.connect(lambda c: self.on_crop_mode_change("drag") if c else None)
+        self.ui.rb_crop_percent.toggled.connect(lambda c: self.on_crop_mode_change("percent") if c else None)
 
         self.ui.image_label.selection_completed.connect(self.image_proc.set_manual_crop_rect)
         self.ui.image_label.files_dropped.connect(self.ocr_handler.handle_dropped_files)

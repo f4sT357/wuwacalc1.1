@@ -65,6 +65,10 @@ class OCRImageLabel(QLabel):
         self.ocr_result = result
         if original_size:
             self.original_crop_size = original_size
+        
+        # Clear manual selection when a new OCR result (crop) is applied
+        self.start_pos = None
+        self.end_pos = None
         self.update()
 
     def set_drag_enabled(self, enabled: bool):
@@ -166,6 +170,8 @@ class OCRImageLabel(QLabel):
         else:
             super().dropEvent(event)
 
+    def paintEvent(self, event):
+        super().paintEvent(event)
         if not self.pixmap():
             return
 
@@ -177,10 +183,11 @@ class OCRImageLabel(QLabel):
         self.offset_y = (lbl_size.height() - pix_size.height()) // 2
 
         # 1. Draw Mask / Selection / Preview
-        if self.is_selecting and self.start_pos and self.end_pos:
-            pen = QPen(QColor(255, 0, 0), 2, Qt.DashLine)
-            painter.setPen(pen)
+        if self.is_selecting and self.start_pos is not None and self.end_pos is not None:
             rect = QRect(self.start_pos, self.end_pos).normalized()
+            painter.setBrush(Qt.BrushStyle.NoBrush)
+            pen = QPen(QColor(255, 0, 0), 2, Qt.PenStyle.DashLine)
+            painter.setPen(pen)
             painter.drawRect(rect)
         elif self.crop_preview_rect:
             l, t, w, h = self.crop_preview_rect

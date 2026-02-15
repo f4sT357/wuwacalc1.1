@@ -203,6 +203,13 @@ class ImageProcessor(QObject):
                     if right > left and bottom > top:
                         self.loaded_image = self.original_image.crop((left, top, right, bottom))
                         self.image_updated.emit(self.loaded_image)
+                        
+                        # Log percentages for reproduction in "Percent" mode
+                        lp, tp, wp, hp = l * 100.0, t * 100.0, (r - l) * 100.0, (b - t) * 100.0
+                        self.log_requested.emit(
+                            f"Drag crop applied: Left={lp:.1f}% Top={tp:.1f}% Width={wp:.1f}% Height={hp:.1f}%"
+                        )
+                        
                         self.run_ocr()
                     else:
                         self.log_requested.emit("Invalid crop area.")

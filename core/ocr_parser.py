@@ -27,8 +27,13 @@ class OcrParser:
         cost = self.detect_cost(raw_text)
         main_stat = self.detect_main_stat(raw_text, cost)
 
+        # Detailed recognition logs
+        if cost:
+            log_messages.append(f"OCR Detected: Cost -> {cost}")
         if main_stat:
-            log_messages.append(f"OCR auto-fill: Main Stat -> {self.tr(main_stat)}")
+            log_messages.append(f"OCR Detected: Main Stat -> {self.tr(main_stat)}")
+        
+        log_messages.append(f"OCR Detected: {len(substats)} Substats")
 
         return OCRResult(
             substats=substats, log_messages=log_messages, cost=cost, main_stat=main_stat, raw_text=raw_text
@@ -175,41 +180,94 @@ class OcrParser:
 
         return found_substats, log_messages
 
+    NUMERIC_CLEANING_MAP = {
+        'B': '8',
+        'S': '5',
+        'O': '0',
+        'o': '0',
+        'I': '1',
+        '|': '1',
+        'l': '1',
+        '!': '1',
+        'g': '9',
+        'q': '9',
+        '(': '1',
+        ')': '1',
+    }
+
+    def _clean_numeric_string(self, text: str) -> str:
+        """Clean common OCR misidentifications and handle decimal delimiters."""
+        if not text:
+            return ""
+        
+        # 1. First pass: map common misreads and treat certain chars as potential decimal points
+        temp = []
+        for char in text:
+            if char.isdigit() or char == '.':
+                temp.append(char)
+            elif char in self.NUMERIC_CLEANING_MAP:
+                temp.append(self.NUMERIC_CLEANING_MAP[char])
+            elif char in [',', ':', ';']:
+                temp.append('.')
+        
+        cleaned = "".join(temp)
+        
+        # 2. Extract only the valid numeric part (digits and dots)
+        # We want to ignore leading/trailing non-numeric noise that might have survived
+        # and ensure we only have one decimal point.
+        match = re.search(r'(\d*\.?\d+)', cleaned)
+        if not match:
+            return ""
+        
+        val_str = match.group(1).strip('.')
+        
+        # Handle cases with multiple dots (e.g. "1.3.8" -> "13.8")
+        if val_str.count('.') > 1:
+            parts = val_str.split('.')
+            # Keep the last dot as the decimal if it looks like a WuWa substat (usually 1 decimal place)
+            val_str = "".join(parts[:-1]) + "." + parts[-1]
+            
+        return val_str
+
     def _parse_single_line(self, line: str, alias_pairs: List[Tuple[str, str]]) -> Optional[Tuple[SubStat, bool]]:
+        # Pre-clean line for common artifacts like bullets or decorative dashes
+        line_clean = re.sub(r'^[\|｜・°º«»〝〟"\'‘\-\s•]+', "", line.strip())
+        line_clean = re.sub(r'[\|｜°º«»〝〟"\'‘]+', " ", line_clean)
+
         stat_found = ""
         num_found = ""
         is_percent = False
 
-        match = re.search(r"(.+?)\s+([\d\.]*\d[\d\.]*(?:\s*[%％])?)", line)
-        if match:
-            stat_text_from_line = match.group(1).strip()
-            num_text_from_line = match.group(2).strip()
-            for stat, alias in alias_pairs:
-                if stat_text_from_line == stat or stat_text_from_line == alias:
-                    stat_found = stat
-                    nums = re.findall(r"[\d\.]*\d[\d\.]*", num_text_from_line.replace("％", "%"))
-                    if nums:
-                        num_found = nums[0]
-                        if "%" in num_text_from_line or "％" in num_text_from_line:
-                            is_percent = True
-                    break
+        # Strategy 1: Look for "StatName [Gap] Value"
+        # We try to find the longest alias that exists in the line
+        best_alias = None
+        best_stat = None
+        for stat, alias in alias_pairs:
+            if alias in line_clean:
+                if best_alias is None or len(alias) > len(best_alias):
+                    best_alias = alias
+                    best_stat = stat
 
-        if not stat_found:
-            for stat, alias in alias_pairs:
-                if alias in line:
-                    stat_found = stat
-                    nums = re.findall(r"[\d\.]*\d[\d\.]*", line.replace("％", "%"))
-                    if nums:
-                        num_found = nums[0]
-                        if "%" in line or "％" in line:
-                            is_percent = True
-                    break
+        if best_stat:
+            stat_found = best_stat
+            # Find the numeric part AFTER the alias
+            parts = line_clean.split(best_alias, 1)
+            search_area = parts[1] if len(parts) > 1 else line_clean
+            
+            num_found = self._clean_numeric_string(search_area)
+            if "%" in search_area or "％" in search_area:
+                is_percent = True
+            
+            # If no number found after name, try the whole line (fallback)
+            if not num_found:
+                num_found = self._clean_numeric_string(line_clean)
 
         if stat_found and num_found:
             corrected_stat, corrected_val, was_percent = self.validate_and_correct_substat(
                 stat_found, num_found, is_percent
             )
-            return SubStat(stat=corrected_stat, value=corrected_val), was_percent
+            if corrected_stat:
+                return SubStat(stat=corrected_stat, value=corrected_val), was_percent
         return None
 
     def validate_and_correct_substat(self, stat_name: str, raw_value: str, is_percent: bool) -> Tuple[str, str, bool]:
@@ -218,23 +276,32 @@ class OcrParser:
         except ValueError:
             return stat_name, raw_value, is_percent
 
-        search_name = stat_name if stat_name in self.data_manager.substat_max_values else f"{stat_name}%"
-        max_val = self.data_manager.substat_max_values.get(search_name)
-        if not max_val:
-            return stat_name, raw_value, is_percent
-
-        if stat_name in ["攻撃力", "HP", "防御力"]:
-            if not is_percent and val < 20.0:
+        # Context-aware Correction: HP/ATK/DEF can be Flat or Percent
+        # In WuWa, flat stats are much larger than percentage stats.
+        # Percentage stats are usually < 15.0%. Flat ATK/DEF are up to 70. Flat HP is up to 580.
+        
+        base_name = stat_name.replace("%", "")
+        if base_name in ["攻撃力", "HP", "防御力"]:
+            # If it looks like a percentage but marked as flat (or vice-versa)
+            if val < 20.0 and not is_percent:
                 is_percent = True
-                stat_name = f"{stat_name}%"
-            elif is_percent and val > 20.0:
+                stat_name = f"{base_name}%"
+            elif val > 20.0 and is_percent:
+                # 20.0% is a safe threshold as no % stat exceeds ~15%
                 is_percent = False
-                stat_name = stat_name.replace("%", "")
+                stat_name = base_name
 
-        if val > max_val * 1.5:
-            new_val = val / 10.0
-            if new_val <= max_val * 1.1:
-                val = new_val
+        # Range Validation: check if value is within plausible bounds (max * 1.5)
+        search_name = stat_name if stat_name.endswith("%") else (stat_name if stat_name in self.data_manager.substat_max_values else f"{stat_name}%")
+        max_val = self.data_manager.substat_max_values.get(search_name)
+        
+        if max_val:
+            # If OCR read 138 instead of 13.8
+            if val > max_val * 2.0:
+                if val / 10.0 <= max_val * 1.2:
+                    val = val / 10.0
+                elif val / 100.0 <= max_val * 1.2:
+                    val = val / 100.0
 
         formatted_val = f"{val:.1f}" if is_percent or "." in raw_value else str(int(val))
         return stat_name, formatted_val, is_percent

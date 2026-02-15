@@ -13,8 +13,11 @@ class OCRHandler(BaseHandler):
         self._batch_assigned_tabs = []
 
     def on_ocr_completed(self, result: Any) -> None:
+        from ui.dialogs.ocr_verification import OCRVerificationDialog
+        
         ocr_data = result if isinstance(result, OCRResult) else result.result
-        self.ui.display_ocr_overlay(ocr_data)
+        original_img = result.original_image if hasattr(result, "original_image") else ocr_data.original_image
+        cropped_img = result.cropped_image if hasattr(result, "cropped_image") else ocr_data.cropped_image
 
         if not self.app.character_var:
             self._temp_ocr_result = result
@@ -25,24 +28,15 @@ class OCRHandler(BaseHandler):
             )
             return
 
-        if (self._ocr_trigger_character is not None
-                and self.app.character_var != self._ocr_trigger_character):
-            msg = self.app.tr("ocr_char_mismatch_warning")
-            reply = QMessageBox.question(
-                self.app, self.app.tr("warning"), msg,
-                QMessageBox.Yes | QMessageBox.No, QMessageBox.No
-            )
-
-            if reply == QMessageBox.No:
-                self.app.gui_log(f"OCR result discarded (Character changed).")
-                return
-
-        if isinstance(result, OCRResult):
-            self._apply_ocr_result(result, result.original_image, result.cropped_image)
-        elif isinstance(result, BatchItemResult):
-            self._apply_ocr_result(
-                result.result, result.original_image, result.cropped_image, is_batch=True
-            )
+        # Show verification dialog
+        dialog = OCRVerificationDialog(self.app, ocr_data, cropped_img)
+        if dialog.exec():
+            # User confirmed
+            verified_data = dialog.get_verified_data()
+            self._apply_ocr_result(verified_data, original_img, cropped_img, 
+                                  is_batch=isinstance(result, BatchItemResult))
+        else:
+            self.app.gui_log("OCR result verification cancelled by user.")
 
     def _apply_ocr_result(self, ocr_data: Any, original_img: Any, cropped_img: Any, is_batch: bool = False) -> None:
         for msg in ocr_data.log_messages:
