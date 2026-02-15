@@ -1,0 +1,20 @@
+{
+  "character": "General-Healer",
+  "character_jp": "汎用(ヒーラー)",
+  "costkey": "[4,3,3,1,1]",
+  "config": "43311",
+  "character_mainstats": {
+    "cost4_echo": "HP回復効果アップ",
+    "cost3_echo_1": "共鳴効率",
+    "cost3_echo_2": "攻撃力%",
+    "cost1_echo_1": "攻撃力%",
+    "cost1_echo_2": "攻撃力%"
+  },
+  "character_weights": {
+    "HP%": 0.8,
+    "HP回復効果アップ": 1.0,
+    "共鳴効率": 0.9,
+    "攻撃力%": 0.5,
+    "HP": 0.4
+  }
+}

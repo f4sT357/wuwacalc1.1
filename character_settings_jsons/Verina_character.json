@@ -1,0 +1,21 @@
+{
+  "character": "Verina",
+  "character_jp": "ヴェリーナ",
+  "costkey": "[4,3,3,1,1]",
+  "config": "43311",
+  "character_mainstats": {
+    "cost4_echo": "HP回復効果アップ",
+    "cost3_echo_1": "共鳴効率",
+    "cost3_echo_2": "共鳴効率",
+    "cost1_echo_1": "攻撃力%",
+    "cost1_echo_2": "攻撃力%"
+  },
+  "character_weights": {
+    "共鳴効率": 1.0,
+    "攻撃力%": 0.8,
+    "攻撃力": 0.5,
+    "HP%": 0.3,
+    "防御力%": 0.3
+  },
+  "element": "回折"
+}

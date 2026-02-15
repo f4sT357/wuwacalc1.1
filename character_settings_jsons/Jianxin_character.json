@@ -1,0 +1,22 @@
+{
+  "character": "Jianxin",
+  "character_jp": "鑑心",
+  "costkey": "[4,3,3,1,1]",
+  "config": "43311",
+  "character_mainstats": {
+    "cost4_echo": "クリティカル率",
+    "cost3_echo_1": "気動ダメージアップ",
+    "cost3_echo_2": "攻撃力%",
+    "cost1_echo_1": "攻撃力%",
+    "cost1_echo_2": "攻撃力%"
+  },
+  "character_weights": {
+    "共鳴効率": 0.9,
+    "攻撃力%": 0.8,
+    "クリティカル率": 0.7,
+    "クリティカルダメージ": 0.7,
+    "重撃ダメージアップ": 0.6,
+    "共鳴解放ダメージアップ": 0.6
+  },
+  "element": "気動"
+}

@@ -1,0 +1,410 @@
+[
+  {
+    "timestamp": "2026-02-02 17:53:14",
+    "character": "Changli",
+    "cost": "1",
+    "action": "Single Evaluation",
+    "result": "Score: 41.43 (rating_a_single)",
+    "fingerprint": "51b66a08f431630df1defe636616dedc",
+    "details": {
+      "score": 41.42857142857142,
+      "rating_key": "rating_a_single"
+    }
+  },
+  {
+    "timestamp": "2026-02-02 17:45:36",
+    "character": "Changli",
+    "cost": "1",
+    "action": "Single Evaluation",
+    "result": "Score: 50.78 (rating_a_single)",
+    "fingerprint": "0d619aee7409ffb27244d8899089cfc1",
+    "details": {
+      "score": 50.77981651376147,
+      "rating_key": "rating_a_single"
+    }
+  },
+  {
+    "timestamp": "2026-02-02 17:45:30",
+    "character": "Changli",
+    "cost": "3",
+    "action": "Single Evaluation",
+    "result": "Score: 41.43 (rating_a_single)",
+    "fingerprint": "cdafe71dba9e588b4a97c0c192f202e6",
+    "details": {
+      "score": 41.42857142857142,
+      "rating_key": "rating_a_single"
+    }
+  },
+  {
+    "timestamp": "2026-01-17 00:01:36",
+    "character": "Shorekeeper",
+    "cost": "4",
+    "action": "Single Evaluation",
+    "result": "Score: 0.00 (rating_c_single)",
+    "fingerprint": "b9906bad9d1ad1f8036d5ca2e22799d8",
+    "details": {
+      "score": 0.0,
+      "rating_key": "rating_c_single"
+    }
+  },
+  {
+    "timestamp": "2025-12-25 19:42:38",
+    "character": "Changli",
+    "cost": "4",
+    "action": "Single Evaluation",
+    "result": "Score: 47.85 (rating_a_single)",
+    "fingerprint": "eaf227d5737ad897a9ced1728a748b52",
+    "details": {
+      "score": 47.845622119815665,
+      "rating_key": "rating_a_single"
+    }
+  },
+  {
+    "timestamp": "2025-12-25 19:15:16",
+    "character": "Changli",
+    "cost": "4",
+    "action": "Single Evaluation",
+    "result": "Score: 47.85 (rating_a_single)",
+    "fingerprint": "8afe469c3c53ac83a77b49cf98d7d7a2",
+    "details": {
+      "score": 47.845622119815665,
+      "rating_key": "rating_a_single"
+    }
+  },
+  {
+    "timestamp": "2025-12-25 19:04:54",
+    "character": "Changli",
+    "cost": "3",
+    "action": "Batch Evaluation",
+    "result": "Score: 0.00 (rating_c_single)",
+    "fingerprint": "eac1cec5e35004e7c8652c937c39ae74",
+    "details": {
+      "score": 0.0,
+      "rating_key": "rating_c_single"
+    }
+  },
+  {
+    "timestamp": "2025-12-25 19:04:54",
+    "character": "Changli",
+    "cost": "3",
+    "action": "Batch Evaluation",
+    "result": "Score: 0.00 (rating_c_single)",
+    "fingerprint": "802df3c8ff69ffe20c6a4fe535778ab2",
+    "details": {
+      "score": 0.0,
+      "rating_key": "rating_c_single"
+    }
+  },
+  {
+    "timestamp": "2025-12-25 19:04:54",
+    "character": "Changli",
+    "cost": "4",
+    "action": "Batch Evaluation",
+    "result": "Score: 59.08 (rating_s_single)",
+    "fingerprint": "e16e187e78aa176e39d122425066a280",
+    "details": {
+      "score": 59.078162425995394,
+      "rating_key": "rating_s_single"
+    }
+  },
+  {
+    "timestamp": "2025-12-25 05:29:16",
+    "character": "Changli",
+    "cost": "1",
+    "action": "Batch Evaluation",
+    "result": "Score: 0.00 (rating_c_single)",
+    "fingerprint": "9f6e2599b3ca2bfb84afd26bab955692",
+    "details": {
+      "score": 0.0,
+      "rating_key": "rating_c_single"
+    }
+  },
+  {
+    "timestamp": "2025-12-25 05:29:16",
+    "character": "Changli",
+    "cost": "3",
+    "action": "Batch Evaluation",
+    "result": "Score: 0.00 (rating_c_single)",
+    "fingerprint": "92af2c096495e101b711f97761a5fe63",
+    "details": {
+      "score": 0.0,
+      "rating_key": "rating_c_single"
+    }
+  },
+  {
+    "timestamp": "2025-12-25 05:29:16",
+    "character": "Changli",
+    "cost": "4",
+    "action": "Batch Evaluation",
+    "result": "Score: 47.85 (rating_a_single)",
+    "fingerprint": "fe24ae1d34934cf5e517c87b39c40ef2",
+    "details": {
+      "score": 47.845622119815665,
+      "rating_key": "rating_a_single"
+    }
+  },
+  {
+    "timestamp": "2025-12-25 05:24:41",
+    "character": "Changli",
+    "cost": "4",
+    "action": "Single Evaluation",
+    "result": "Score: 59.08 (rating_s_single)",
+    "fingerprint": "a547112ace733525e049b077f6777dbb",
+    "details": {
+      "score": 59.078162425995394,
+      "rating_key": "rating_s_single"
+    }
+  },
+  {
+    "timestamp": "2025-12-25 04:23:14",
+    "character": "Changli",
+    "cost": "4",
+    "action": "Single Evaluation",
+    "result": "Score: 3.00 (rating_c_single)",
+    "fingerprint": "293af1b1c760ee7d0b6af6ca5e29f360",
+    "details": {
+      "score": 3.0,
+      "rating_key": "rating_c_single"
+    }
+  },
+  {
+    "timestamp": "2025-12-25 04:13:18",
+    "character": "Changli",
+    "cost": "4",
+    "action": "Single Evaluation",
+    "result": "Score: 38.58 (rating_a_single)",
+    "fingerprint": "b3ca2762b53c715b1fa2bac81bc99cba",
+    "details": {
+      "score": 38.578094975972036,
+      "rating_key": "rating_a_single"
+    }
+  },
+  {
+    "timestamp": "2025-12-25 04:12:09",
+    "character": "Changli",
+    "cost": "4",
+    "action": "Single Evaluation",
+    "result": "Score: 49.57 (rating_a_single)",
+    "fingerprint": "9131076cb37d18c9d73ce45b5d933091",
+    "details": {
+      "score": 49.57264525993884,
+      "rating_key": "rating_a_single"
+    }
+  },
+  {
+    "timestamp": "2025-12-25 04:06:08",
+    "character": "Changli",
+    "cost": "4",
+    "action": "Single Evaluation",
+    "result": "Score: 43.76 (rating_a_single)",
+    "fingerprint": "6cdeea0c56c1ee89675ab3519b39a99a",
+    "details": {
+      "score": 43.75633333333333,
+      "rating_key": "rating_a_single"
+    }
+  },
+  {
+    "timestamp": "2025-12-25 04:05:53",
+    "character": "Changli",
+    "cost": "4",
+    "action": "Single Evaluation",
+    "result": "Score: 3.00 (rating_c_single)",
+    "fingerprint": "334290feb876258523efc9ee96a60210",
+    "details": {
+      "score": 3.0,
+      "rating_key": "rating_c_single"
+    }
+  },
+  {
+    "timestamp": "2025-12-25 01:32:16",
+    "character": "Changli",
+    "cost": "4",
+    "action": "Single Evaluation",
+    "result": "Score: 48.92 (rating_a_single)",
+    "fingerprint": "17bed1782ef8e5ed6b18a9eb78610cfd",
+    "details": {
+      "score": 48.92396636085627,
+      "rating_key": "rating_a_single"
+    }
+  },
+  {
+    "timestamp": "2025-12-25 00:22:56",
+    "character": "Changli",
+    "cost": "1",
+    "action": "Single Evaluation",
+    "result": "Score: 3.00 (C - Needs Improvement)",
+    "fingerprint": "c5ccdaf4f8db48a7358f7d30ea839821",
+    "details": {
+      "score": 3.0
+    }
+  },
+  {
+    "timestamp": "2025-12-25 00:19:10",
+    "character": "Changli",
+    "cost": "1",
+    "action": "Single Evaluation",
+    "result": "Score: 3.00 (C - Needs Improvement)",
+    "fingerprint": "534468d089d8ddd707628d5b18a270eb",
+    "details": {
+      "score": 3.0
+    }
+  },
+  {
+    "timestamp": "2025-12-24 01:58:06",
+    "character": "Changli",
+    "cost": "3",
+    "action": "Single Evaluation",
+    "result": "Score: 48.92 (A - 良好な音骸)",
+    "fingerprint": "d8813fc242e2f0a6c5df82af13b83ad4",
+    "details": {
+      "score": 48.92396636085627
+    }
+  },
+  {
+    "timestamp": "2025-12-24 01:54:22",
+    "character": "Changli",
+    "cost": "3",
+    "action": "Single Evaluation",
+    "result": "Score: 38.58 (A - 良好な音骸)",
+    "fingerprint": "0d3d0ee3d956a0014976106aae5d895b",
+    "details": {
+      "score": 38.578094975972036
+    }
+  },
+  {
+    "timestamp": "2025-12-24 01:35:13",
+    "character": "Changli",
+    "cost": "1",
+    "action": "Single Evaluation",
+    "result": "Score: 43.76 (A - 良好な音骸)",
+    "fingerprint": "043e41603c9b783d841ff819764b5e3f",
+    "details": {
+      "score": 43.75633333333333
+    }
+  },
+  {
+    "timestamp": "2025-12-24 01:34:59",
+    "character": "",
+    "cost": "1",
+    "action": "Single Evaluation",
+    "result": "Score: 43.76 (A - 良好な音骸)",
+    "fingerprint": "4fb5598343aa1fba20f43cd32852735c",
+    "details": {
+      "score": 43.75633333333333
+    }
+  },
+  {
+    "timestamp": "2025-12-24 01:28:08",
+    "character": "Changli",
+    "cost": "3",
+    "action": "Single Evaluation",
+    "result": "Score: 49.57 (A - 良好な音骸)",
+    "fingerprint": "291f502ebb792b169539bc090636fff8",
+    "details": {
+      "score": 49.57264525993884
+    }
+  },
+  {
+    "timestamp": "2025-12-24 01:27:32",
+    "character": "Changli",
+    "cost": "3",
+    "action": "Single Evaluation",
+    "result": "Score: 38.58 (A - 良好な音骸)",
+    "fingerprint": "0d3d0ee3d956a0014976106aae5d895b",
+    "details": {
+      "score": 38.578094975972036
+    }
+  },
+  {
+    "timestamp": "2025-12-24 01:12:36",
+    "character": "Changli",
+    "cost": "1",
+    "action": "Single Evaluation",
+    "result": "Score: 51.58 (S - 優秀な音骸)",
+    "fingerprint": "088368bce546778c207b9ccf4a602205",
+    "details": {
+      "score": 51.57733333333333
+    }
+  },
+  {
+    "timestamp": "2025-12-24 00:02:46",
+    "character": "",
+    "cost": "4",
+    "action": "Single Evaluation",
+    "result": "Score: 43.12 (A - 良好な音骸)",
+    "fingerprint": "eaaa71b2b3929d4cf0a6e8bf559512cd",
+    "details": {}
+  },
+  {
+    "timestamp": "2025-12-24 00:01:28",
+    "character": "Changli",
+    "cost": "1",
+    "action": "Single Evaluation",
+    "result": "Score: 37.83 (A - 良好な音骸)",
+    "fingerprint": "e6cd6553a2c7ef05908ebc094a3818d0",
+    "details": {}
+  },
+  {
+    "timestamp": "2025-12-23 22:29:50",
+    "character": "Changli",
+    "cost": "4",
+    "action": "Single Evaluation",
+    "result": "Score: 43.76 (A - 良好な音骸)",
+    "fingerprint": "c02cca9db93ff2da14172ce7fa831494",
+    "details": {}
+  },
+  {
+    "timestamp": "2025-12-23 22:29:03",
+    "character": "Changli",
+    "cost": "4",
+    "action": "Single Evaluation",
+    "result": "Score: 49.57 (A - 良好な音骸)",
+    "fingerprint": "62f6708876de57b71991435fdcfd0881",
+    "details": {}
+  },
+  {
+    "timestamp": "2025-12-23 22:25:53",
+    "character": "",
+    "cost": "1",
+    "action": "Single Evaluation",
+    "result": "Score: 42.40 (A - 良好な音骸)",
+    "fingerprint": "855e242b989a6b256be4be1a8cd99ba8",
+    "details": {}
+  },
+  {
+    "timestamp": "2025-12-23 22:24:10",
+    "character": "",
+    "cost": "1",
+    "action": "Single Evaluation",
+    "result": "Score: 42.40 (A - 良好な音骸)",
+    "fingerprint": "2719400bb3caaa456f2fe15138d4826d",
+    "details": {}
+  },
+  {
+    "timestamp": "2025-12-23 21:29:22",
+    "character": "Changli",
+    "cost": "1",
+    "action": "Single Evaluation",
+    "result": "Score: 48.92 (A - 良好な音骸)",
+    "fingerprint": "6218d0fc5bbc3e1ee3f537d4e2f23c70",
+    "details": {}
+  },
+  {
+    "timestamp": "2025-12-23 21:28:44",
+    "character": "Changli",
+    "cost": "1",
+    "action": "Single Evaluation",
+    "result": "Score: 42.40 (A - 良好な音骸)",
+    "fingerprint": "2719400bb3caaa456f2fe15138d4826d",
+    "details": {}
+  },
+  {
+    "timestamp": "2025-12-23 12:12:36",
+    "character": "Changli",
+    "cost": "4",
+    "action": "Single Evaluation",
+    "result": "Score: 49.57 (A - 良好な音骸)",
+    "fingerprint": "62f6708876de57b71991435fdcfd0881",
+    "details": {}
+  }
+]

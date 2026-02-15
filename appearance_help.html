@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WuwaCalc カスタマイズガイド</title>
+    <style>
+        :root {
+            --bg-color: #0f0f12;
+            --text-color: #e0e0e0;
+            --accent-color: #00bcd4;
+            --secondary-color: #9c27b0;
+            --card-bg: rgba(255, 255, 255, 0.05);
+            --card-border: 1px solid rgba(255, 255, 255, 0.1);
+            --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: 'Segoe UI', 'Meiryo', Roboto, Helvetica, Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            line-height: 1.6;
+            background-image:
+                radial-gradient(circle at 15% 15%, rgba(0, 188, 212, 0.15) 0%, transparent 25%),
+                radial-gradient(circle at 85% 85%, rgba(156, 39, 176, 0.15) 0%, transparent 25%);
+            background-attachment: fixed;
+        }
+
+        .container {
+            max-width: 850px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 2.2rem;
+            margin-bottom: 30px;
+            background: linear-gradient(45deg, var(--accent-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 30px rgba(0, 188, 212, 0.3);
+        }
+
+        h2 {
+            border-bottom: 2px solid var(--accent-color);
+            padding-bottom: 10px;
+            margin-top: 40px;
+            color: var(--accent-color);
+            display: flex;
+            align-items: center;
+        }
+
+        h2::before {
+            content: '✨';
+            margin-right: 12px;
+            font-size: 0.8em;
+        }
+
+        .card {
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: var(--card-border);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: var(--glass-shadow);
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            border-color: rgba(0, 188, 212, 0.4);
+            box-shadow: 0 12px 48px 0 rgba(0, 188, 212, 0.2);
+        }
+
+        .feature-item {
+            margin-bottom: 20px;
+        }
+
+        .feature-title {
+            font-weight: bold;
+            color: #fff;
+            font-size: 1.1em;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        code {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Consolas', monospace;
+            color: #ffcc80;
+        }
+
+        .tip-box {
+            background: rgba(0, 188, 212, 0.1);
+            padding: 15px;
+            border-radius: 12px;
+            border-left: 4px solid var(--accent-color);
+            margin: 20px 0;
+        }
+
+        .warning-box {
+            background: rgba(255, 87, 34, 0.1);
+            padding: 15px;
+            border-radius: 12px;
+            border-left: 4px solid #ff5722;
+            margin: 20px 0;
+            color: #ffccbc;
+        }
+
+        .example-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .example-card {
+            background: rgba(0, 0, 0, 0.2);
+            padding: 15px;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        strong {
+            color: #fff;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 60px;
+            padding-bottom: 30px;
+            opacity: 0.5;
+            font-size: 0.85rem;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <h1>Appearance Customization Guide</h1>
+
+        <div class="card">
+            <h2>基本テーマの設定</h2>
+            <div class="feature-item">
+                <span class="feature-title">テーマの選択</span>
+                <ul>
+                    <li><strong>Dark</strong>: 標準的なダークモード。視認性が高く、長時間の使用に適しています。</li>
+                    <li><strong>Light</strong>: 明るいホワイトベースのモード。</li>
+                    <li><strong>Clear</strong>: 背景画像を最大限に活かすための透明感重視モード。</li>
+                </ul>
+            </div>
+
+            <div class="feature-item">
+                <span class="feature-title">フレーム透過</span>
+                <p>各設定枠（グループボックス）の境界線や背景を完全に取り除き、背景画像との一体感を高めます。<code>Clear</code> テーマと組み合わせるのがおすすめです。</p>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>背景画像と不透明度</h2>
+            <div class="feature-item">
+                <span class="feature-title">背景画像の設定</span>
+                <p>「画像を選択」から任意の画像を設定できます。お気に入りのキャラクターや風景を設定しましょう。</p>
+                <div class="tip-box">
+                    <strong>💡 相対パスの活用（ポータビリティ）:</strong><br>
+                    使用したい画像をアプリと同じフォルダ（または <code>images/</code>
+                    フォルダなど）に置いてから選択すると、設定が自動的に「相対パス」になります。これにより、ツール一式を移動させても背景画像の設定が壊れません。
+                </div>
+            </div>
+
+            <div class="feature-item">
+                <span class="feature-title">不透明度スライダー</span>
+                <p>メインウィンドウの背景色の濃さを調整します。<code>0%</code> に近づけるほど背景画像がはっきりと見え、<code>100%</code> に近づけるほど単色背景になります。</p>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>色の詳細調整</h2>
+            <ul>
+                <li><strong>文字色</strong>: 背景画像に合わせて文字が見にくい場合、ここから一括変更できます（即座に反映されます）。</li>
+                <li><strong>入力欄背景色</strong>: コンボボックスやテキストエディタの背景色を個別に指定できます。</li>
+                <li><strong>フォント</strong>: システムにインストールされている日本語フォントから、アプリの雰囲気に合うものを選べます。</li>
+            </ul>
+        </div>
+
+        <div class="card">
+            <h2>おすすめの組み合わせ</h2>
+            <div class="example-grid">
+                <div class="example-card">
+                    <strong>🌟 モダン・グラス</strong><br>
+                    テーマ: <code>Clear</code><br>
+                    フレーム透過: <code>ON</code><br>
+                    不透明度: <code>75%</code>
+                </div>
+                <div class="example-card">
+                    <strong>🕶️ 集中モード</strong><br>
+                    テーマ: <code>Dark</code><br>
+                    文字色: <code>#Cyan</code> (水色)<br>
+                    不透明度: <code>95%</code>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>トラブルシューティング</h2>
+            <div class="warning-box">
+                <p><strong>設定が反映されない、または見づらくなった場合:</strong></p>
+                <ul>
+                    <li>「全リセット」ボタンを押すと、すべての外観設定がデフォルト（Darkモード）に戻ります。</li>
+                    <li>文字が見えない場合は、まず「文字色」を白（#ffffff）または黒（#000000）にして、「不透明度」を 90% 以上に上げてみてください。</li>
+                </ul>
+            </div>
+        </div>
+
+        <footer>
+            WuwaCalc Customization Engine<br>
+            Last Updated: 2025-12-25
+        </footer>
+    </div>
+
+</body>
+
+</html>

@@ -1,0 +1,54 @@
+{
+    "main_stat_multiplier": 15.0,
+    "roll_quality": {
+        "ranges": {
+            "クリティカル率": {
+                "Max": 9.3,
+                "Good": 8.7,
+                "Low": 7.5
+            },
+            "クリティカルダメージ": {
+                "Max": 18.6,
+                "Good": 17.4,
+                "Low": 15.0
+            },
+            "共鳴効率": {
+                "Max": 13.0,
+                "Good": 12.0,
+                "Low": 10.1
+            },
+            "攻撃力%": {
+                "Max": 13.3,
+                "Good": 12.4,
+                "Low": 10.5
+            }
+        },
+        "points": {
+            "Max": 3,
+            "Good": 2,
+            "Low": 1,
+            "Default": 0.5
+        }
+    },
+    "effective_stats": {
+        "base_multiplier": 20,
+        "bonus_multiplier": {
+            "5": 1.2,
+            "4": 1.1,
+            "3": 1.0,
+            "2": 0.8,
+            "1": 0.6,
+            "default": 0.5
+        },
+        "threshold": 0.5
+    },
+    "cv_weights": {
+        "crit_rate": 2.0,
+        "crit_dmg": 1.0,
+        "atk_percent": 1.1,
+        "atk_flat_divisor": 10.0,
+        "atk_flat_multiplier": 1.2,
+        "er": 0.5,
+        "dmg_bonus": 1.1
+    }
+}

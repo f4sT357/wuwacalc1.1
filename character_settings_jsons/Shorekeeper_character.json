@@ -1,0 +1,20 @@
+{
+  "character": "Shorekeeper",
+  "character_jp": "ショアキーパー",
+  "costkey": "[4,3,3,1,1]",
+  "config": "43311",
+  "character_mainstats": {
+    "4": "HP%",
+    "3_1": "共鳴効率",
+    "3_2": "共鳴効率",
+    "1_1": "HP%",
+    "1_2": "HP%"
+  },
+  "character_weights": {
+    "HP%": 1.0,
+    "共鳴効率": 1.0,
+    "HP": 0.5,
+    "クリティカルダメージ": 1.0
+  },
+  "element": "回折"
+}

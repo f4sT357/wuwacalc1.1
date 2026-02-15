@@ -1,0 +1,22 @@
+{
+  "character": "Lingyang",
+  "character_jp": "凌陽",
+  "costkey": "[4,3,3,1,1]",
+  "config": "43311",
+  "character_mainstats": {
+    "cost4_echo": "クリティカルダメージ",
+    "cost3_echo_1": "凝縮ダメージアップ",
+    "cost3_echo_2": "凝縮ダメージアップ",
+    "cost1_echo_1": "攻撃力%",
+    "cost1_echo_2": "攻撃力%"
+  },
+  "character_weights": {
+    "クリティカル率": 1.0,
+    "クリティカルダメージ": 1.0,
+    "攻撃力%": 0.8,
+    "共鳴解放ダメージアップ": 0.8,
+    "通常攻撃ダメージアップ": 0.6,
+    "攻撃力": 0.4
+  },
+  "element": "凝縮"
+}

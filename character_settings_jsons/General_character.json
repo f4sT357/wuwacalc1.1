@@ -1,0 +1,20 @@
+{
+  "character": "General",
+  "character_jp": "汎用",
+  "costkey": "[4,3,3,1,1]",
+  "config": "43311",
+  "character_mainstats": {
+    "cost4_echo": "クリティカル率",
+    "cost3_echo_1": "属性ダメージアップ",
+    "cost3_echo_2": "攻撃力%",
+    "cost1_echo_1": "攻撃力%",
+    "cost1_echo_2": "攻撃力%"
+  },
+  "character_weights": {
+    "クリティカル率": 1.0,
+    "クリティカルダメージ": 1.0,
+    "攻撃力%": 0.9,
+    "攻撃力": 0.4,
+    "共鳴効率": 0.5
+  }
+}

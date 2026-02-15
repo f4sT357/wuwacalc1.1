@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WuwaCalc ユーザーズガイド</title>
+    <style>
+        :root {
+            --bg-color: #121212;
+            --text-color: #e0e0e0;
+            --accent-color: #00bcd4;
+            --card-bg: rgba(255, 255, 255, 0.05);
+            --card-border: 1px solid rgba(255, 255, 255, 0.1);
+            --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: 'Segoe UI', 'Meiryo', Roboto, Helvetica, Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            line-height: 1.6;
+            background-image:
+                radial-gradient(circle at 10% 20%, rgba(0, 188, 212, 0.1) 0%, transparent 20%),
+                radial-gradient(circle at 90% 80%, rgba(156, 39, 176, 0.1) 0%, transparent 20%);
+            background-attachment: fixed;
+        }
+
+        .container {
+            max-width: 850px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            background: linear-gradient(45deg, #00bcd4, #9c27b0);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 20px rgba(0, 188, 212, 0.3);
+        }
+
+        h2 {
+            border-bottom: 2px solid var(--accent-color);
+            padding-bottom: 10px;
+            margin-top: 40px;
+            color: var(--accent-color);
+            display: flex;
+            align-items: center;
+        }
+
+        h2::before {
+            content: '✦';
+            margin-right: 10px;
+            font-size: 0.8em;
+        }
+
+        .card {
+            background: var(--card-bg);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            border: var(--card-border);
+            border-radius: 16px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: var(--glass-shadow);
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+            border-color: rgba(0, 188, 212, 0.3);
+        }
+
+        .step-box {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid var(--accent-color);
+            margin: 15px 0;
+        }
+
+        .step-num {
+            display: inline-block;
+            background: var(--accent-color);
+            color: #000;
+            width: 24px;
+            height: 24px;
+            text-align: center;
+            line-height: 24px;
+            border-radius: 50%;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        code {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Consolas', monospace;
+            color: #ffcc80;
+        }
+
+        .shortcut {
+            color: #00bcd4;
+            font-weight: bold;
+        }
+
+        .warning-box {
+            background: rgba(255, 87, 34, 0.1);
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #ff5722;
+            margin: 10px 0;
+            color: #ffccbc;
+        }
+
+        ul {
+            padding-left: 20px;
+        }
+
+        li {
+            margin-bottom: 10px;
+        }
+
+        strong {
+            color: #fff;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 50px;
+            padding-bottom: 20px;
+            opacity: 0.6;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <h1>WuwaCalc User Guide</h1>
+
+        <div class="card">
+            <h2>アプリの概要</h2>
+            <p>
+                <b>WuwaCalc</b> は、鳴潮（Wuthering Waves）の音骸スコアを多角的に評価するためのツールです。
+                OCR（光学文字認識）による自動入力機能を備え、複数の評価指標から音骸の「真の価値」を算出します。
+            </p>
+        </div>
+
+        <div class="card">
+            <h2>基本的な使い方</h2>
+
+            <div class="step-box">
+                <span class="step-num">1</span> <b>キャラクターの設定</b><br>
+                「キャラ設定」ボタンからキャラクターを登録します。ステータスの重み、参照ステータス（ATK/HP/DEF）、基礎ステータス等を設定できます。設定した内容は、OCR配分や「厳選達成率」の計算に反映されます。
+            </div>
+
+            <div class="step-box">
+                <span class="step-num">2</span> <b>音骸データの入力</b><br>
+                <ul>
+                    <li><strong>OCR（自動）</strong>: <code>Win+Shift+S</code> 等で撮影し <span class="shortcut">Ctrl+V</span>
+                        で貼り付け。</li>
+                    <li><strong>インテリジェント配分</strong>: OCR時にコスト（1/3/4）を自動判別し、空いている最適なタブへ振り分けます。バッチ処理（最大5枚同時）にも対応しています。
+                    </li>
+                    <li><strong>装備自動ロード</strong>: キャラ切り替え時、未入力のタブには「装備中」として保存されたデータが自動的にロードされます。</li>
+                </ul>
+            </div>
+
+            <div class="step-box">
+                <span class="step-num">3</span> <b>スコア計算</b><br>
+                <span class="shortcut">F5</span> キーまたは <span class="shortcut">Ctrl+Enter</span>
+                で実行。「自動計算」にチェックを入れると即座に結果が出ます。
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>スコアボード機能</h2>
+            <p>
+                「スコアボード」ボタンでビルド全体画像を生成します。
+            <ul>
+                <li><strong>5列レイアウト</strong>: 全5つのエコーを横一列に並べ、一目でステータスを確認可能。</li>
+                <li><strong>正確な数値評価</strong>: スコアから「%」記号を削除し、純粋な加点評価としての数値を表示。</li>
+                <li><strong>有効ステータス数</strong>: 各エコーに何個の有効なステータスがあるかを明記。</li>
+            </ul>
+            </p>
+        </div>
+
+        <div class="card">
+            <h2>便利な機能と設定</h2>
+            <ul>
+                <li><strong>表示設定・翻訳</strong>: 言語設定（日/英/中）は変更後、即座にUI全体に反映されます。</li>
+                <li><strong>OCR前処理エンジン</strong>: <code>Pillow</code> エンジンを使用して、文字の読み取り精度を高めるための二値化・ノイズ除去を自動的に行います。</li>
+                <li><strong>計算履歴</strong>: 計算したデータは自動保存され、「履歴」ボタンから過去の厳選進捗を確認できます。</li>
+                <li><strong>重複スキップ</strong>: 全く同じデータを二重にOCRしてしまい、手修正を台無しにするのを防ぎます。</li>
+            </ul>
+        </div>
+
+        <div class="card">
+            <h2>OCR精度向上のコツ</h2>
+            <div class="warning-box">
+                <ul>
+                    <li><strong>クロップ設定</strong>: 音骸名や数値が端で切れないよう、「クロップ設定」タブで範囲を調整してください。</li>
+                    <li><strong>実数値と%の自動補正</strong>: OCRが「.」を読み飛ばしても、理論値に基づき「%」か「固定値」かを自動で推論し補正します。</li>
+                    <li><strong>バッチ計算</strong>: 複数枚をまとめて読み込んだ際は、ログの見やすさを優先して最終計算のみを詳細に出力します。</li>
+                </ul>
+            </div>
+        </div>
+
+        <footer>
+            WuwaCalc App - Designed for Wuthering Waves Players<br>
+            Current Flow Logic based on PROCESS_FLOW.md
+        </footer>
+    </div>
+
+</body>
+
+</html>
