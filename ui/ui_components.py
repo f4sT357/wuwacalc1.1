@@ -361,11 +361,6 @@ class UIComponents:
         self._setup_settings_tab(settings_layout)
         self.main_tabs.addTab(settings_tab, self.app.tr("settings") if hasattr(self.app, "tr") else "Settings")
 
-        # 3. Log Tab
-        log_tab = QWidget()
-        log_layout = QVBoxLayout(log_tab)
-        self._setup_log_tab(log_layout)
-        self.main_tabs.addTab(log_tab, self.app.tr("log") if hasattr(self.app, "tr") else "Log")
 
     def _setup_calculator_tab(self, layout: QVBoxLayout) -> None:
         # Top Bar: Character, Config, Calculate
@@ -460,18 +455,15 @@ class UIComponents:
         self.btn_equip.clicked.connect(self.app.set_current_as_equipped)
         act_l.addWidget(self.btn_equip, 0, 0)
 
-        self.btn_score = QPushButton(self.app.tr("scoreboard"))
-        self.btn_score.clicked.connect(self.app.events.generate_scoreboard)
-        act_l.addWidget(self.btn_score, 0, 1)
 
         # Row 2
         self.btn_export = QPushButton(self.app.tr("export_txt"))
         self.btn_export.clicked.connect(self.app.export_result_to_txt)
-        act_l.addWidget(self.btn_export, 1, 0)
+        act_l.addWidget(self.btn_export, 0, 1)
 
         self.btn_clear = QPushButton(self.app.tr("clear_all"))
         self.btn_clear.clicked.connect(self.app.clear_all)
-        act_l.addWidget(self.btn_clear, 1, 1)
+        act_l.addWidget(self.btn_clear, 1, 0)
 
         right_l.addWidget(act_group)
         
@@ -522,16 +514,13 @@ class UIComponents:
         mode_h.addWidget(self.rb_single)
         calc_vbox.addLayout(mode_h)
 
-        # Methods Checkboxes
-        methods_h = QHBoxLayout()
-        self.lbl_methods.setText(self.app.tr("methods_label"))
-        methods_h.addWidget(self.lbl_methods)
-        enabled = self.app.app_config.enabled_calc_methods
-        for m, cb in self.method_checkboxes.items():
-            cb.setText(self.app.tr(f"method_{m}"))
-            cb.setChecked(enabled.get(m, True))
-            methods_h.addWidget(cb)
-        calc_vbox.addLayout(methods_h)
+        # Methods Checkboxes (Hidden for simplicity)
+        # enabled = self.app.app_config.enabled_calc_methods
+        # for m, cb in self.method_checkboxes.items():
+        #     cb.setText(self.app.tr(f"method_{m}"))
+        #     cb.setChecked(enabled.get(m, True))
+        #     methods_h.addWidget(cb)
+        # calc_vbox.addLayout(methods_h)
         
         layout.addWidget(self.calc_group)
 
@@ -573,9 +562,9 @@ class UIComponents:
             self.rb_crop_drag.setChecked(True)
         else:
             self.rb_crop_percent.setChecked(True)
-        crop_main_h.addWidget(self.rb_crop_drag)
-        crop_main_h.addWidget(self.rb_crop_percent)
-        ocr_vbox.addLayout(crop_main_h)
+        # crop_main_h.addWidget(self.rb_crop_drag)
+        # crop_main_h.addWidget(self.rb_crop_percent)
+        # ocr_vbox.addLayout(crop_main_h)
 
         crop_sliders_h = QHBoxLayout()
         self.entry_crop_l, self.slider_crop_l, lbl_l = self._create_crop_item(
@@ -590,11 +579,11 @@ class UIComponents:
         self.entry_crop_h, self.slider_crop_h, lbl_h = self._create_crop_item(
             crop_sliders_h, self.app.tr("height_percent"), self.app.app_config.crop_height_percent, "slider_crop_h"
         )
-        self.crop_labels["L"] = lbl_l
-        self.crop_labels["T"] = lbl_t
-        self.crop_labels["W"] = lbl_w
-        self.crop_labels["H"] = lbl_h
-        ocr_vbox.addLayout(crop_sliders_h)
+        # self.crop_labels["L"] = lbl_l
+        # self.crop_labels["T"] = lbl_t
+        # self.crop_labels["W"] = lbl_w
+        # self.crop_labels["H"] = lbl_h
+        # ocr_vbox.addLayout(crop_sliders_h)
 
         layout.addWidget(self.ocr_group)
 
@@ -657,7 +646,7 @@ class UIComponents:
         # Tab names
         self.main_tabs.setTabText(0, self.app.tr("calculator"))
         self.main_tabs.setTabText(1, self.app.tr("settings"))
-        self.main_tabs.setTabText(2, self.app.tr("log"))
+        # self.main_tabs.setTabText(2, self.app.tr("log"))
 
         # Calculator Tab
         self.lbl_character.setText(self.app.tr("character"))
@@ -701,18 +690,18 @@ class UIComponents:
         self.rb_batch.setToolTip(self.app.tr("tooltip_batch_mode"))
         self.rb_single.setToolTip(self.app.tr("tooltip_single_mode"))
 
-        self.lbl_methods.setText(self.app.tr("methods_label"))
-        for m, cb in self.method_checkboxes.items():
-            cb.setText(self.app.tr(f"method_{m}"))
+        # self.lbl_methods.setText(self.app.tr("methods_label"))
+        # for m, cb in self.method_checkboxes.items():
+        #     cb.setText(self.app.tr(f"method_{m}"))
 
         self.lbl_crop_mode.setText(self.app.tr("crop_mode"))
         self.rb_crop_drag.setText(self.app.tr("drag"))
         self.rb_crop_percent.setText(self.app.tr("percent"))
 
-        self.crop_labels["L"].setText(self.app.tr("left_percent"))
-        self.crop_labels["T"].setText(self.app.tr("top_percent"))
-        self.crop_labels["W"].setText(self.app.tr("width_percent"))
-        self.crop_labels["H"].setText(self.app.tr("height_percent"))
+        # self.crop_labels["L"].setText(self.app.tr("left_percent"))
+        # self.crop_labels["T"].setText(self.app.tr("top_percent"))
+        # self.crop_labels["W"].setText(self.app.tr("width_percent"))
+        # self.crop_labels["H"].setText(self.app.tr("height_percent"))
 
         # Missing Settings groups and buttons
         if hasattr(self, "gen_group"): self.gen_group.setTitle(self.app.tr("general_settings"))

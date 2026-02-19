@@ -50,15 +50,21 @@ class TestUIComponents(unittest.TestCase):
         self.mock_app.open_display_settings = MagicMock()
         self.mock_app.open_image_preprocessing_settings = MagicMock()
         self.mock_app.open_history = MagicMock()
-        self.mock_app.open_char_settings_new = MagicMock()
         self.mock_app.open_char_settings_edit = MagicMock()
+        self.mock_app.set_current_as_equipped = MagicMock()
+        self.mock_app.set_current_as_unequipped = MagicMock()
+        self.mock_app.export_result_to_txt = MagicMock()
+        self.mock_app.calculate_batch = MagicMock()
+        self.mock_app.clear_all_items = MagicMock()
+        self.mock_app.clear_all = MagicMock()
 
         # Mock image related attributes
         self.mock_app.loaded_image = None
         self.mock_app.image_label = None
 
         # Notebook needed for UIComponents init
-        self.mock_app.notebook = MagicMock()
+        from PySide6.QtWidgets import QTabWidget
+        self.mock_app.notebook = QTabWidget()
 
         self.ui = UIComponents(self.mock_app)
 
@@ -70,7 +76,7 @@ class TestUIComponents(unittest.TestCase):
             self.fail(f"create_main_layout raised exception: {e}")
 
         self.assertIsNotNone(self.ui.main_widget)
-        self.assertIsNotNone(self.ui.settings_group)
+        self.assertIsNotNone(self.ui.gen_group)
 
 
 if __name__ == "__main__":

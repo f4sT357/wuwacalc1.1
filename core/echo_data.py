@@ -150,9 +150,9 @@ class EchoData:
         scaling_stat: str = "攻撃力",
     ) -> EvaluationResult:
         """Perform a full evaluation using multiple methodologies and stat estimations."""
-        stat_offsets = stat_offsets or {}
-        base_stats = base_stats or {}
-        ideal_stats = ideal_stats or {}
+        stat_offsets = stat_offsets or config_bundle.get("stat_offsets", {})
+        base_stats = base_stats or config_bundle.get("base_stats", {})
+        ideal_stats = ideal_stats or config_bundle.get("ideal_stats", {})
         enabled_methods = enabled_methods or {
             "normalized": True, "ratio": True, "roll": True, "effective": True, "cv": True
         }
@@ -186,7 +186,7 @@ class EchoData:
         sub_keys = {str(k) for k in self.substats.keys()}
         offset_keys = {str(k) for k in stat_offsets.keys()}
         
-        estimated = {
+        estimated_stats = {
             name: self.substats.get(name, 0.0) + stat_offsets.get(name, 0.0)
             for name in (sub_keys | offset_keys)
         }
@@ -200,15 +200,15 @@ class EchoData:
         if scaling_stat in base_stats:
             base_val = base_stats[scaling_stat]
             p_stat = p_map.get(scaling_stat)
-            p_sum = estimated.get(p_stat, 0.0)
-            f_sum = estimated.get(scaling_stat, 0.0)
-
+            p_sum = estimated_stats.get(p_stat, 0.0)
+            f_sum = estimated_stats.get(scaling_stat, 0.0)
+            
             final_val = (base_val * (1.0 + p_sum / 100.0)) + f_sum
-            estimated[f"Total {scaling_stat}"] = final_val
-
+            estimated_stats[f"Total {scaling_stat}"] = final_val
+            
             target = ideal_stats.get(scaling_stat, 0.0)
             if target > 0:
-                estimated[f"Goal {scaling_stat} %"] = (final_val / target) * 100.0
+                estimated_stats[f"Goal {scaling_stat} %"] = (final_val / target) * 100.0
 
         # Main Stat Consistency Check
         consistency_msg = ""
@@ -289,7 +289,7 @@ class EchoData:
             recommendation="rec_continue" if achievement_rate < 30.0 else "rec_use",
             rating=rating_key,
             individual_scores=results,
-            estimated_stats=estimated,
+            estimated_stats=estimated_stats,
             consistency_advice=consistency_msg,
             advice_list=advice_list
         )

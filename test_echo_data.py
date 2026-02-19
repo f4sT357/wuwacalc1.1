@@ -79,8 +79,8 @@ class TestEchoData(unittest.TestCase):
         }
 
         result = self.echo.evaluate_comprehensive(weights, config_bundle)
-        self.assertIn("total_score", result)
-        self.assertIn("individual_scores", result)
+        self.assertIsNotNone(result.total_score)
+        self.assertIn("normalized", result.individual_scores)
 
     def test_entry_contracts(self):
         sub_list = [SubStat(stat="ATK", value="10%")]

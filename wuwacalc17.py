@@ -132,9 +132,17 @@ class ScoreCalculatorApp(QMainWindow):
         self.current_config_key = self.app_config.current_config_key
         self.mode_var = self.app_config.mode_var
         self.character_var = ""
-        self.auto_apply_main_stats = self.app_config.auto_apply_main_stats
-        self.score_mode_var = self.app_config.score_mode_var
-        self.crop_mode_var = self.app_config.crop_mode
+        self.score_mode_var = "single"  # Default to single for beginners
+        self.crop_mode_var = "drag"     # Default to drag mode
+        
+        # Force specific methods for simplification
+        self.app_config.enabled_calc_methods = {
+            "normalized": True,
+            "ratio": False,
+            "roll": False,
+            "effective": False,
+            "cv": True,
+        }
         self._current_app_theme = self.app_config.theme
 
     def gui_log(self, message: str) -> None:

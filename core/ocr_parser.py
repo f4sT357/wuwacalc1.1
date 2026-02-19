@@ -276,32 +276,29 @@ class OcrParser:
         except ValueError:
             return stat_name, raw_value, is_percent
 
-        # Context-aware Correction: HP/ATK/DEF can be Flat or Percent
-        # In WuWa, flat stats are much larger than percentage stats.
-        # Percentage stats are usually < 15.0%. Flat ATK/DEF are up to 70. Flat HP is up to 580.
-        
-        base_name = stat_name.replace("%", "")
-        if base_name in ["攻撃力", "HP", "防御力"]:
-            # If it looks like a percentage but marked as flat (or vice-versa)
-            if val < 20.0 and not is_percent:
-                is_percent = True
-                stat_name = f"{base_name}%"
-            elif val > 20.0 and is_percent:
-                # 20.0% is a safe threshold as no % stat exceeds ~15%
-                is_percent = False
-                stat_name = base_name
-
-        # Range Validation: check if value is within plausible bounds (max * 1.5)
+        # 1. Range Validation: check if value is within plausible bounds (max * 1.2)
+        # We perform this BEFORE percent/flat check to ensure we are comparing within the same unit if possible.
         search_name = stat_name if stat_name.endswith("%") else (stat_name if stat_name in self.data_manager.substat_max_values else f"{stat_name}%")
         max_val = self.data_manager.substat_max_values.get(search_name)
         
         if max_val:
-            # If OCR read 138 instead of 13.8
+            # If OCR read 138 instead of 13.8 or similar
             if val > max_val * 2.0:
-                if val / 10.0 <= max_val * 1.2:
+                if val / 10.0 <= max_val * 1.5:
                     val = val / 10.0
-                elif val / 100.0 <= max_val * 1.2:
+                elif val / 100.0 <= max_val * 1.5:
                     val = val / 100.0
+
+        # 2. Context-aware Correction: HP/ATK/DEF can be Flat or Percent
+        base_name = stat_name.replace("%", "")
+        if base_name in ["攻撃力", "HP", "防御力"]:
+            # Now that val is corrected (e.g. 11.6), we can reliably check thresholds
+            if val < 20.0 and not is_percent:
+                is_percent = True
+                stat_name = f"{base_name}%"
+            elif val > 20.0 and is_percent:
+                is_percent = False
+                stat_name = base_name
 
         formatted_val = f"{val:.1f}" if is_percent or "." in raw_value else str(int(val))
         return stat_name, formatted_val, is_percent

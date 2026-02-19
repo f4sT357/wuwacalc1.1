@@ -28,7 +28,7 @@ class TestTabManagerDuplicates(unittest.TestCase):
         self.character_manager = type("char_mgr", (), {"get_main_stats": lambda self, name: {}})()
 
         self.tab_mgr = TabManager(
-            self.app.notebook, self.data_manager, self.config_manager, self.tr, self.character_manager
+            self.data_manager, self.config_manager, self.tr, self.character_manager
         )
         # テスト用のタブデータを直接セット
         self.tab_mgr.tabs_content = {
