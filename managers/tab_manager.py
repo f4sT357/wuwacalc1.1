@@ -9,7 +9,7 @@ from __future__ import annotations
 
 import logging
 import hashlib
-from typing import Dict, Any, List, Optional, Callable, TYPE_CHECKING
+from typing import Dict, Any, List, Optional, Callable, Union, TYPE_CHECKING
 
 from PySide6.QtWidgets import QTabWidget, QFileDialog, QWidget
 from PySide6.QtCore import QObject, Signal
@@ -381,32 +381,34 @@ class TabManager(QObject):
 
         return cost_matches[0]
     
-    def get_next_available_tab(self, exclude_tabs: List[str] = None, cost: str = None) -> Optional[str]:
-        """Find the first empty tab that is not in the excluded list, optionally filtered by cost."""
-        if exclude_tabs is None:
-            exclude_tabs = []
-            
-        config_key = self._validate_config_key()
-        tab_names = self.data_manager.tab_configs.get(config_key, [])
-        
-        # 1. Look for empty tabs with matching cost
-        for name in tab_names:
-            if name not in exclude_tabs and self.is_tab_empty(name):
-                if cost is None or self.tabs_content[name]["cost"] == str(cost):
-                    return name
-        
-        # 2. If no matching empty tab, try to find ANY tab (even occupied) that matches cost 
-        #    and isn't in exclusion (for fallback)
-        if cost is not None:
-            for name in tab_names:
-                if name not in exclude_tabs and self.tabs_content[name]["cost"] == str(cost):
-                    return name
+        return None
 
-        # 3. Final fallback: just return the first one not in exclusion if any (without cost constraint)
-        for name in tab_names:
-            if name not in exclude_tabs:
-                return name
-                
+    def _generate_fingerprint(self, data: Union[EchoEntry, OCRResult, Dict[str, Any]]) -> str:
+        """Create a consistent hash for an echo based on its core stats."""
+        if isinstance(data, (EchoEntry, OCRResult)):
+            cost = str(data.cost) if data.cost else "?"
+            main = str(data.main_stat) if data.main_stat else "?"
+            # Substats sorted by name for consistency
+            subs = sorted([(s.stat, s.value) for s in data.substats], key=lambda x: x[0])
+        else:
+            # Assume dict from _save_current_tab_state
+            cost = str(data.get("cost", "?"))
+            main = str(data.get("main_stat", "?"))
+            subs = sorted(data.get("substats", []), key=lambda x: x[0])
+        
+        subs_str = "|".join(f"{s[0]}:{s[1]}" for s in subs)
+        raw = f"{cost}|{main}|{subs_str}"
+        return hashlib.md5(raw.encode("utf-8")).hexdigest()
+
+    def find_tab_by_echo_data(self, data: Union[OCRResult, EchoEntry]) -> Optional[str]:
+        """Check all tabs to see if this echo already exists somewhere."""
+        target_fp = self._generate_fingerprint(data)
+        
+        for tab_name, content in self.tabs_content.items():
+            entry = self.extract_tab_data(tab_name)
+            if entry and not self.is_tab_empty(tab_name):
+                if self._generate_fingerprint(entry) == target_fp:
+                    return tab_name
         return None
 
     def is_tab_empty(self, tab_name: str) -> bool:

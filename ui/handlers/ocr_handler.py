@@ -42,6 +42,9 @@ class OCRHandler(BaseHandler):
         for msg in ocr_data.log_messages:
             self.app.gui_log(msg)
 
+        # Strategy 1: Check for duplicates in other tabs
+        existing_tab = self.tab_mgr.find_tab_by_echo_data(ocr_data)
+        
         target_tab = self.tab_mgr.find_best_tab_match(
             ocr_data.cost, ocr_data.main_stat, self.app.character_var
         )
@@ -61,6 +64,26 @@ class OCRHandler(BaseHandler):
                 target_tab = self.app.get_selected_tab_name()
 
         if target_tab:
+            # Check if we are moving an existing echo
+            if existing_tab and existing_tab != target_tab and not is_batch:
+                from PySide6.QtWidgets import QMessageBox
+                old_label = self.tab_mgr._generate_tab_label(existing_tab)
+                new_label = self.tab_mgr._generate_tab_label(target_tab)
+                
+                reply = QMessageBox.question(
+                    self.app, self.app.tr("duplicate_found"),
+                    self.app.tr("move_echo_msg", 
+                        f"この音骸は既に「{old_label}」に登録されています。\n「{new_label}」へ移動しますか？"),
+                    QMessageBox.Yes | QMessageBox.No
+                )
+                
+                if reply == QMessageBox.Yes:
+                    self.app.gui_log(f"Moving echo from {existing_tab} to {target_tab}")
+                    self.tab_mgr.clear_tab(existing_tab)
+                else:
+                    self.app.gui_log("OCR application cancelled: Duplicate echo already exists.")
+                    return
+
             if is_batch:
                 self._batch_assigned_tabs.append(target_tab)
             else:
