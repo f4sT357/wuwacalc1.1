@@ -16,7 +16,9 @@ try:
 except ImportError:
     is_pil_installed = False
 
-from utils.utils import crop_image_by_percent
+from utils.utils import crop_image_by_percent, ResolutionPresetManager
+from utils.constants import CROP_PRESETS_FILENAME
+from utils.utils import get_app_path
 from core.data_contracts import BatchItemResult, CropConfig, OCRResult
 from core.worker_thread import OCRWorker
 
@@ -46,6 +48,11 @@ class ImageProcessor(QObject):
         self.loaded_image = None
         self.original_image = None
         self.manual_crop_rect = None  # (left, top, right, bottom) relative 0.0-1.0
+
+        # Resolution preset manager — auto-applies saved crop regions by resolution
+        import os
+        preset_path = os.path.join(get_app_path(), CROP_PRESETS_FILENAME)
+        self.res_preset_mgr = ResolutionPresetManager(preset_path)
 
         # Batch processing state
         self._batch_assigned_tabs: Set[str] = set()
@@ -138,7 +145,41 @@ class ImageProcessor(QObject):
         # Reset manual crop on new image
         self.manual_crop_rect = None
 
+        # --- Auto-apply resolution preset ---
+        self._auto_apply_resolution_preset()
+
         self.perform_crop()
+
+    def _auto_apply_resolution_preset(self) -> None:
+        """Check if a saved crop preset exists for the image resolution and auto-apply it.
+        
+        - Exact resolution match is used when available.
+        - Falls back to same aspect-ratio preset within 2% tolerance.
+        - If no preset exists, logs a hint for the user.
+        """
+        if self.original_image is None:
+            return
+
+        w, h = self.original_image.size
+        preset = self.res_preset_mgr.find_best_preset(w, h)
+
+        if preset:
+            self.config_manager.update_app_setting("crop_left_percent",  preset["l"])
+            self.config_manager.update_app_setting("crop_top_percent",   preset["t"])
+            self.config_manager.update_app_setting("crop_width_percent", preset["w"])
+            self.config_manager.update_app_setting("crop_height_percent",preset["h"])
+            is_exact = self.res_preset_mgr.has_preset(w, h)
+            label = "exact" if is_exact else "aspect-ratio match"
+            self.log_requested.emit(
+                f"[Auto Crop] Preset applied ({label}) for {w}x{h}: "
+                f"L={preset['l']:.1f}% T={preset['t']:.1f}% "
+                f"W={preset['w']:.1f}% H={preset['h']:.1f}%"
+            )
+        else:
+            self.log_requested.emit(
+                f"[Auto Crop] No preset for {w}x{h}. "
+                "Drag to select the echo stats area, then click 'Save for this resolution'."
+            )
 
     def paste_from_clipboard(self) -> None:
         """Paste image from clipboard."""

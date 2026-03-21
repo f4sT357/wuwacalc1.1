@@ -75,6 +75,100 @@ def crop_image_by_percent(
     return img.crop((left, top, right, bottom))
 
 
+class ResolutionPresetManager:
+    """Manages resolution-based crop presets, stored in crop_presets.json.
+    
+    Preset keys are resolution strings like "1920x1080".
+    On lookup, it first tries exact match, then falls back to
+    nearest aspect ratio match among saved presets.
+    """
+
+    def __init__(self, preset_file_path: str):
+        self._path = preset_file_path
+        self._presets: dict = {}   # {"1920x1080": {l, t, w, h}}
+        self._load()
+
+    def _load(self):
+        import json
+        try:
+            if os.path.exists(self._path):
+                with open(self._path, "r", encoding="utf-8") as f:
+                    data = json.load(f)
+                    self._presets = data.get("resolution_presets", {})
+        except Exception:
+            self._presets = {}
+
+    def _save(self):
+        import json
+        try:
+            os.makedirs(os.path.dirname(self._path), exist_ok=True)
+            with open(self._path, "w", encoding="utf-8") as f:
+                json.dump({"resolution_presets": self._presets}, f,
+                          ensure_ascii=False, indent=2)
+        except Exception as e:
+            logging.getLogger(__name__).warning(f"Failed to save crop presets: {e}")
+
+    @staticmethod
+    def _res_key(width: int, height: int) -> str:
+        return f"{width}x{height}"
+
+    @staticmethod
+    def _aspect_ratio(width: int, height: int) -> float:
+        return round(width / height, 3) if height else 0.0
+
+    def find_best_preset(self, img_width: int, img_height: int) -> dict | None:
+        """Find the best matching preset for the given resolution.
+        
+        Priority:
+        1. Exact resolution match ("1920x1080")
+        2. Same aspect ratio ± 0.01 tolerance
+        Returns None if no match found.
+        """
+        if not self._presets:
+            return None
+
+        # 1. Exact match
+        key = self._res_key(img_width, img_height)
+        if key in self._presets:
+            return dict(self._presets[key])
+
+        # 2. Aspect ratio fallback
+        target_ratio = self._aspect_ratio(img_width, img_height)
+        best_key = None
+        best_diff = float("inf")
+        for res_key, preset in self._presets.items():
+            try:
+                w_str, h_str = res_key.split("x")
+                ratio = self._aspect_ratio(int(w_str), int(h_str))
+                diff = abs(ratio - target_ratio)
+                if diff < best_diff:
+                    best_diff = diff
+                    best_key = res_key
+            except Exception:
+                continue
+
+        # Accept if aspect ratio is within 2% tolerance
+        if best_key and best_diff <= 0.02:
+            return dict(self._presets[best_key])
+
+        return None
+
+    def save_preset(self, img_width: int, img_height: int,
+                    l: float, t: float, w: float, h: float):
+        """Save a crop preset keyed by the exact image resolution."""
+        key = self._res_key(img_width, img_height)
+        self._presets[key] = {"l": l, "t": t, "w": w, "h": h}
+        self._save()
+
+    def has_preset(self, img_width: int, img_height: int) -> bool:
+        """Return True if an exact preset exists for this resolution."""
+        return self._res_key(img_width, img_height) in self._presets
+
+    def get_all_presets(self) -> dict:
+        """Return a copy of all stored presets."""
+        return dict(self._presets)
+
+
 def get_substat_display(stat_name, value):
     """
     Display string for substats.

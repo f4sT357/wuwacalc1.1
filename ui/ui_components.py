@@ -461,6 +461,10 @@ class UIComponents:
         self.btn_export.clicked.connect(self.app.export_result_to_txt)
         act_l.addWidget(self.btn_export, 0, 1)
 
+        self.btn_score = QPushButton(self.app.tr("scoreboard"))
+        self.btn_score.clicked.connect(self.app.events.generate_scoreboard)
+        act_l.addWidget(self.btn_score, 1, 1)
+
         self.btn_clear = QPushButton(self.app.tr("clear_all"))
         self.btn_clear.clicked.connect(self.app.clear_all)
         act_l.addWidget(self.btn_clear, 1, 0)

@@ -1,18 +1,3 @@
 {
-  "crop_presets": [
-    {
-      "name": "4zigensan",
-      "l": 70.5,
-      "t": 15.0,
-      "w": 23.9,
-      "h": 34.6
-    },
-    {
-      "name": "4zigensan2",
-      "l": 70.9,
-      "t": 15.0,
-      "w": 23.5,
-      "h": 34.6
-    }
-  ]
+  "resolution_presets": {}
 }

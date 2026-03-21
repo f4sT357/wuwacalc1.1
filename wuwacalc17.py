@@ -131,6 +131,7 @@ class ScoreCalculatorApp(QMainWindow):
         self.language = self.app_config.language
         self.current_config_key = self.app_config.current_config_key
         self.mode_var = self.app_config.mode_var
+        self.auto_apply_main_stats = self.app_config.auto_apply_main_stats
         self.character_var = ""
         self.score_mode_var = "single"  # Default to single for beginners
         self.crop_mode_var = "drag"     # Default to drag mode
