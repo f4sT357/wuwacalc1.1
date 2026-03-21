@@ -188,6 +188,22 @@ class TabManager(QObject):
         del self._temp_old_data
         self.tabs_updated.emit()
 
+    def update_tab_label_with_rank(self, tab_name: str, rank: str) -> None:
+        """Update a specific tab's label to include a rank badge [RANK]."""
+        if tab_name not in self.tabs_content:
+            return
+        
+        # Store rank in tab metadata
+        self.tabs_content[tab_name]["rank"] = rank
+        
+        # Update UI
+        config_key = self._validate_config_key()
+        tab_names = self.data_manager.tab_configs.get(config_key, [])
+        if tab_name in tab_names:
+            idx = tab_names.index(tab_name)
+            new_label = self._generate_tab_label(tab_name, rank)
+            self.tab_label_update_requested.emit(idx, new_label)
+
     def retranslate_tabs(self, language: str) -> None:
         """Update tab labels and widget text for the specified language."""
         self._updating_tabs = True
@@ -195,7 +211,8 @@ class TabManager(QObject):
             config_key = self._validate_config_key()
             tab_names = self.data_manager.tab_configs.get(config_key, [])
             for i, name in enumerate(tab_names):
-                new_label = self._generate_tab_label(name)
+                rank = self.tabs_content.get(name, {}).get("rank")
+                new_label = self._generate_tab_label(name, rank)
                 self.tab_label_update_requested.emit(i, new_label)
 
             for content in self.tabs_content.values():
@@ -223,8 +240,9 @@ class TabManager(QObject):
 
             main_val, substats = content["widget"].get_data()
             sub_vals = [(s.stat, s.value) for s in substats]
+            rank = content.get("rank")
 
-            state[state_key] = {"main_stat": main_val, "substats": sub_vals}
+            state[state_key] = {"main_stat": main_val, "substats": sub_vals, "rank": rank}
         return state
 
     def _calculate_cost_counts(self, tab_names: List[str]) -> Dict[str, int]:
@@ -254,14 +272,16 @@ class TabManager(QObject):
         }
 
 
-    def _generate_tab_label(self, tab_name: str) -> str:
-        """Generate a translated display label for a tab."""
+    def _generate_tab_label(self, tab_name: str, rank: str = None) -> str:
+        """Generate a translated display label for a tab, optionally with rank badge."""
         try:
             parts = tab_name.split("_")
             c_num = parts[0]
             base_label = self.tr("cost_echo", c_num)
             suffix = f" {parts[1]}" if len(parts) >= 2 else ""
-            return f"{base_label}{suffix}"
+            
+            badge = f" [{rank}]" if rank else ""
+            return f"{base_label}{suffix}{badge}"
         except Exception:
             return tab_name
 
@@ -272,7 +292,10 @@ class TabManager(QObject):
         content = self.tabs_content[tab_name]
         main_val = data.get("main_stat", "")
         saved_substats = data.get("substats", [])
+        rank = data.get("rank")
         content["widget"].set_data(main_val, saved_substats)
+        if rank:
+            self.update_tab_label_with_rank(tab_name, rank)
 
     def extract_tab_data(self, tab_name: str) -> Optional[EchoEntry]:
         """Retrieve structured echo data from a specific tab widget."""

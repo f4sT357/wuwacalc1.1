@@ -463,6 +463,10 @@ class UIComponents:
 
         self.btn_score = QPushButton(self.app.tr("scoreboard"))
         self.btn_score.clicked.connect(self.app.events.generate_scoreboard)
+        self.btn_score.setToolTip(self.app.tr("tooltip_scoreboard"))
+        # High prominence styling
+        self.btn_score.setStyleSheet("font-weight: bold; background-color: #2a6496; color: white;")
+        self.btn_score.setMinimumHeight(38)
         act_l.addWidget(self.btn_score, 1, 1)
 
         self.btn_clear = QPushButton(self.app.tr("clear_all"))
@@ -605,18 +609,22 @@ class UIComponents:
 
         self.btn_hist = QPushButton(self.app.tr("history"))
         self.btn_hist.clicked.connect(self.app.events.open_history)
+        self.btn_hist.setToolTip(self.app.tr("tooltip_history"))
         diag_h.addWidget(self.btn_hist)
 
         self.btn_disp = QPushButton(self.app.tr("display_settings"))
         self.btn_disp.clicked.connect(self.app.events.open_display_settings)
+        self.btn_disp.setToolTip(self.app.tr("tooltip_display_settings"))
         diag_h.addWidget(self.btn_disp)
 
         self.btn_pre = QPushButton(self.app.tr("preprocess_settings"))
         self.btn_pre.clicked.connect(self.app.events.open_image_preprocessing_settings)
+        self.btn_pre.setToolTip(self.app.tr("tooltip_preprocess"))
         diag_h.addWidget(self.btn_pre)
 
         self.btn_help = QPushButton(self.app.tr("help"))
         self.btn_help.clicked.connect(self.app._open_readme)
+        self.btn_help.setToolTip(self.app.tr("tooltip_help"))
         diag_h.addWidget(self.btn_help)
 
         layout.addLayout(diag_h)
@@ -672,9 +680,13 @@ class UIComponents:
         self.btn_apply_crop.setToolTip(self.app.tr("tooltip_apply_selection"))
 
         self.btn_equip.setText(self.app.tr("set_equipped"))
+        self.btn_equip.setToolTip(self.app.tr("tooltip_set_equipped"))
         self.btn_score.setText(self.app.tr("scoreboard"))
+        self.btn_score.setToolTip(self.app.tr("tooltip_scoreboard"))
         self.btn_export.setText(self.app.tr("export_txt"))
+        self.btn_export.setToolTip(self.app.tr("tooltip_export_txt"))
         self.btn_clear.setText(self.app.tr("clear_all"))
+        self.btn_clear.setToolTip(self.app.tr("tooltip_clear_all"))
 
         # Settings Tab
         # (Assuming these labels/combos are stored as self.attributes)

@@ -98,6 +98,31 @@ TRANSLATIONS = {
         "log_waiting_for_character": "キャラクター未選択のため、計算を待機しています。",
         "settings_loaded": "設定を読み込みました",
         "language": "言語 (Language):",
+        "onboarding_guidance": "① キャラを選択 → ② Ctrl+V で貼付 → ③ 自動計算",
+        "welcome_onboarding_html": """
+<div style='padding:20px; line-height:1.6;'>
+    <h2 style='color:#FFD700;'>👋 鳴潮音骸スコア計算機へようこそ！</h2>
+    <p>このツールは、スクリーンショットから音骸の属性を自動読み取りしてスコアを計算します。</p>
+    <ol>
+        <li>上部の選択肢から<b>キャラクター</b>を選んでください。</li>
+        <li>ゲーム内の音骸詳細画面で <b>Ctrl+V</b> で画像を貼り付けてください。</li>
+        <li>自動的に計算が始まり、ランク（SS/S/A...）がタブに表示されます！</li>
+    </ol>
+    <p style='color:#aaa; font-size:12px;'>※ 正しく読み取れない場合は「切り取り実行」ボタンから範囲を調整し、「この解像度を保存」してください。</p>
+</div>
+""",
+        "crop_save_resolution": "この解像度を保存",
+        "tooltip_save_resolution": "現在の切り取り範囲をこの画像の解像度（例: 1920x1080）専用のデフォルトとして保存します。次回同じ解像度の画像を貼ると自動適用されます。",
+        "tooltip_scoreboard": "現在の全タブの音骸を1枚の画像にまとめます。",
+        "tooltip_set_equipped": "現在の音骸をこのキャラの装備済みとして登録します。",
+        "tooltip_history": "過去の計算履歴を表示します。",
+        "tooltip_display_settings": "テーマやフォント、透明度を設定します。",
+        "tooltip_preprocess": "OCR読み取り精度のための画像処理設定です。",
+        "tooltip_calculate": "現在のデータのスコアを計算します。",
+        "tooltip_clear_all": "すべてのタブのデータを消去します。",
+        "tooltip_export_txt": "計算結果をテキストファイルで保存します。",
+        "tooltip_help": "使い方の説明（README）を表示します。",
+
         "restart_required": "再起動が必要です",
         "restart_msg": "言語設定を変更しました。適用するにはアプリケーションを再起動してください。",
         "language_changed_title": "言語変更",
@@ -465,6 +490,31 @@ TRANSLATIONS = {
         "log_waiting_for_character": "Calculation is waiting for character selection.",
         "settings_loaded": "Settings loaded",
         "language": "Language:",
+        "onboarding_guidance": "① Select Character → ② Ctrl+V to Paste → ③ Auto Calculate",
+        "welcome_onboarding_html": """
+<div style='padding:20px; line-height:1.6;'>
+    <h2 style='color:#FFD700;'>👋 Welcome to Wuthering Waves Echo Calculator!</h2>
+    <p>This tool automatically reads echo stats from screenshots and calculates scores.</p>
+    <ol>
+        <li>Select a <b>Character</b> from the dropdown above.</li>
+        <li>Paste an echo detail screenshot using <b>Ctrl+V</b>.</li>
+        <li>The score and rank (SS/S/A...) will appear on the tab automatically!</li>
+    </ol>
+    <p style='color:#aaa; font-size:12px;'>* If OCR fails, use "Perform Crop" to adjust area and click "Save for this Resolution".</p>
+</div>
+""",
+        "crop_save_resolution": "Save for this Resolution",
+        "tooltip_save_resolution": "Save current crop as default for this resolution (e.g. 1920x1080). It will be auto-applied next time.",
+        "tooltip_scoreboard": "Generate a summary image of all echoes.",
+        "tooltip_set_equipped": "Set current echo as equipped for this character.",
+        "tooltip_history": "View calculation history.",
+        "tooltip_display_settings": "Change theme, font, and transparency.",
+        "tooltip_preprocess": "OCR image processing settings.",
+        "tooltip_calculate": "Calculate score for current data.",
+        "tooltip_clear_all": "Clear all tabs.",
+        "tooltip_export_txt": "Export results to a TXT file.",
+        "tooltip_help": "Open help/README.",
+
         "restart_required": "Restart Required",
         "restart_msg": "Language setting changed. Please restart the application to apply.",
         "language_changed_title": "Language Changed",

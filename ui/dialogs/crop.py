@@ -134,6 +134,12 @@ class CropDialog(QDialog):
         self._apply_current_app_crop_settings()
 
         # Buttons
+        self.btn_save_res = QPushButton(self.app.tr("crop_save_resolution"))
+        self.btn_save_res.clicked.connect(self._save_resolution_preset)
+        self.btn_save_res.setToolTip(self.app.tr("tooltip_save_resolution"))
+        # Distinguishable style
+        self.btn_save_res.setStyleSheet("background-color: #3d3d3d; border: 1px solid #555;")
+        
         btn_layout = QHBoxLayout()
         btn_reset = QPushButton(self.app.tr("reset"))
         btn_reset.clicked.connect(self._reset_selection)
@@ -145,6 +151,7 @@ class CropDialog(QDialog):
         btn_cancel.clicked.connect(self.reject)
 
         btn_layout.addWidget(btn_reset)
+        btn_layout.addWidget(self.btn_save_res)
         btn_layout.addStretch()
         btn_layout.addWidget(btn_ok)
         btn_layout.addWidget(btn_cancel)
@@ -363,6 +370,27 @@ class CropDialog(QDialog):
         self.image_label.rubberBand.hide()
         self.image_label.current_rect = QRect()
         self._update_percent_label()
+
+    def _save_resolution_preset(self):
+        """Save the current selection as a resolution-keyed preset."""
+        if not self.last_percent:
+            QMessageBox.warning(self, self.app.tr("warning"), self.app.tr("crop_too_small"))
+            return
+
+        l, t, w, h = self.last_percent
+        img_w, img_h = self.pil_image.size
+        
+        try:
+            # Save to ResolutionPresetManager via ImageProcessor
+            self.app.image_proc.res_preset_mgr.save_preset(img_w, img_h, l, t, w, h)
+            
+            QMessageBox.information(
+                self, 
+                self.app.tr("info"), 
+                f"Saved preset for {img_w}x{h}.\n(L:{l:.1f}% T:{t:.1f}% W:{w:.1f}% H:{h:.1f}%)"
+            )
+        except Exception as e:
+            QMessageBox.critical(self, self.app.tr("error"), f"Failed to save resolution preset: {e}")
 
     def _ok(self):
         import json

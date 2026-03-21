@@ -168,6 +168,14 @@ class ScoreCalculatorApp(QMainWindow):
         """Handle completion of a single echo score calculation."""
         self.ui.result_text.setHtml(html)
         self.tab_mgr.save_tab_result(tab_name, html)
+        
+        # --- UI Optimization: Add Rank Badge to Tab Label ---
+        if evaluation and hasattr(evaluation, 'rank'):
+            rank = str(evaluation.rank)
+            self.tab_mgr.update_tab_label_with_rank(tab_name, rank)
+        else:
+            # If no rank but calculated, mark as completed
+            self.tab_mgr.update_tab_label_with_rank(tab_name, "●")
 
     def on_batch_calc_completed(self, html: str, character: str) -> None:
         """Handle completion of batch calculation for all echoes."""
@@ -352,6 +360,31 @@ class ScoreCalculatorApp(QMainWindow):
         self.tab_mgr.update_tabs()
         self.events.on_profiles_updated()
         check_and_alert_environment(self.gui_log)
+
+        # --- UI Optimization: Status Bar Guidance ---
+        guidance = self.tr("onboarding_guidance")
+        if guidance == "onboarding_guidance": # Fallback if translation missing
+            guidance = "① キャラクターを選択 → ② Ctrl+V でゲーム画面を貼付 → ③ 計算"
+        self.status_bar.showMessage(guidance, 0)
+
+        # --- UI Optimization: Welcome Onboarding ---
+        if self.ctx.is_first_run:
+            welcome_html = self.tr("welcome_onboarding_html")
+            if welcome_html == "welcome_onboarding_html": # Fallback
+                welcome_html = """
+                <div style='padding:20px; line-height:1.6;'>
+                    <h2 style='color:#FFD700;'>👋 鳴潮音骸スコア計算機へようこそ！</h2>
+                    <p>このツールは、スクリーンショットから音骸のステータスを自動読み取りしてスコアを計算します。</p>
+                    <ol>
+                        <li>上部のコンボボックスから<b>キャラクター</b>を選択してください。</li>
+                        <li>ゲーム内の音骸詳細画面で <b>Windows+Shift+S</b> 等でスクリーンショットを撮ります。</li>
+                        <li>このアプリをアクティブにして <b>Ctrl+V</b> で貼り付けてください。</li>
+                        <li>自動的に計算が始まり、結果が表示されます！</li>
+                    </ol>
+                    <p style='color:#aaa; font-size:12px;'>※ 初めての方は「設定」タブからクロップ範囲（読み取り範囲）の調整が必要な場合があります。</p>
+                </div>
+                """
+            self.ui.result_text.setHtml(welcome_html)
         
         if not IS_PIL_INSTALLED:
              QMessageBox.critical(

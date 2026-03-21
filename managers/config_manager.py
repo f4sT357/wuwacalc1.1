@@ -42,7 +42,7 @@ class AppConfig:
     current_config_key: str = DEFAULT_COST_CONFIG
     character_var: str = ""
     auto_apply_main_stats: bool = True
-    auto_calculate: bool = False
+    auto_calculate: bool = True
     mode_var: str = "manual"
     score_mode_var: str = "batch"
     crop_mode: str = "percent"

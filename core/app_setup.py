@@ -44,6 +44,7 @@ class AppContext:
         config_path = os.path.join(get_app_path(), CONFIG_FILENAME)
         self.config_manager = ConfigManager(config_path)
         load_status = self.config_manager.load()
+        self.is_first_run = (load_status is False)
         if load_status == "CORRUPTED":
             self.logger.warning("Config file is corrupted. Using default settings.")
             QMessageBox.warning(
