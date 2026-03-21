@@ -11,6 +11,7 @@ class CharacterHandler(BaseHandler):
             self.app.character_var = ""
             self.tab_mgr.apply_character_main_stats()
             self.app.events.save_config()
+            self.ui.update_input_guard()
             return
 
         self.app.character_var = internal_name
@@ -25,6 +26,7 @@ class CharacterHandler(BaseHandler):
         self.app.events.save_config()
 
         self._load_equipped_echoes(internal_name)
+        self.ui.update_input_guard()
         
         # Check deferred OCR
         if hasattr(self.app.events, 'ocr_handler'):

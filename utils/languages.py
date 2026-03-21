@@ -98,6 +98,7 @@ TRANSLATIONS = {
         "log_waiting_for_character": "キャラクター未選択のため、計算を待機しています。",
         "settings_loaded": "設定を読み込みました",
         "language": "言語 (Language):",
+        "please_select_character": "⚠️ 先にキャラクターを選択してください",
         "onboarding_guidance": "① キャラを選択 → ② Ctrl+V で貼付 → ③ 自動計算",
         "welcome_onboarding_html": """
 <div style='padding:20px; line-height:1.6;'>
@@ -490,6 +491,7 @@ TRANSLATIONS = {
         "log_waiting_for_character": "Calculation is waiting for character selection.",
         "settings_loaded": "Settings loaded",
         "language": "Language:",
+        "please_select_character": "⚠️ Please select a character first",
         "onboarding_guidance": "① Select Character → ② Ctrl+V to Paste → ③ Auto Calculate",
         "welcome_onboarding_html": """
 <div style='padding:20px; line-height:1.6;'>

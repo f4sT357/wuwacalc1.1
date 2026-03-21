@@ -377,12 +377,12 @@ class UIComponents:
         self.config_combo.setCurrentText(self.app.current_config_key)
         top_h.addWidget(self.config_combo, 1)
 
-        btn_calc = QPushButton(self.app.tr("calculate"))
-        btn_calc.setObjectName("btn_main_calculate")
-        btn_calc.clicked.connect(self.app.events.trigger_calculation)
-        btn_calc.setMinimumHeight(40)
-        btn_calc.setStyleSheet("font-weight: bold; font-size: 14px;")
-        top_h.addWidget(btn_calc, 1)
+        self.btn_calculate = QPushButton(self.app.tr("calculate"))
+        self.btn_calculate.setObjectName("btn_main_calculate")
+        self.btn_calculate.clicked.connect(self.app.events.trigger_calculation)
+        self.btn_calculate.setMinimumHeight(40)
+        self.btn_calculate.setStyleSheet("font-weight: bold; font-size: 14px;")
+        top_h.addWidget(self.btn_calculate, 1)
         
         layout.addLayout(top_h)
 
@@ -477,6 +477,41 @@ class UIComponents:
         
         splitter.addWidget(right_w)
         splitter.setSizes([WINDOW_WIDTH // 2, WINDOW_WIDTH // 2])
+
+        # Apply initial input guard state
+        self.update_input_guard()
+
+    def update_input_guard(self) -> None:
+        """Enable or disable input and action buttons based on whether a character is selected."""
+        # Index 0 is "-- Select Character --"
+        has_char = self.character_combo.currentIndex() > 0
+        
+        # Primary Action Buttons
+        if hasattr(self, "btn_load"): self.btn_load.setEnabled(has_char)
+        if hasattr(self, "btn_paste"): self.btn_paste.setEnabled(has_char)
+        if hasattr(self, "btn_crop"): self.btn_crop.setEnabled(has_char)
+        if hasattr(self, "btn_calculate"): self.btn_calculate.setEnabled(has_char)
+        
+        # Manual Input & Tab Group (Notebook)
+        if hasattr(self.app, "notebook"):
+            self.app.notebook.setEnabled(has_char)
+            
+        # Grid Actions
+        if hasattr(self, "btn_equip"): self.btn_equip.setEnabled(has_char)
+        if hasattr(self, "btn_clear"): self.btn_clear.setEnabled(has_char)
+        if hasattr(self, "btn_export"): self.btn_export.setEnabled(has_char)
+        if hasattr(self, "btn_score"): self.btn_score.setEnabled(has_char)
+        
+        # Status Bar Guidance
+        if hasattr(self.app, "status_bar"):
+            if not has_char:
+                # Highlight with a temporary warning if no character
+                self.app.status_bar.showMessage(self.app.tr("please_select_character"), 0)
+                self.app.status_bar.setStyleSheet("QStatusBar { color: #ff5555; font-weight: bold; }")
+            else:
+                # Restore default guidance and style
+                self.app.status_bar.showMessage(self.app.tr("onboarding_guidance"), 0)
+                self.app.status_bar.setStyleSheet("")
 
     def _setup_settings_tab(self, layout: QVBoxLayout) -> None:
         # 1. General & Language
