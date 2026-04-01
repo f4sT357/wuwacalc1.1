@@ -141,24 +141,37 @@ class ImageProcessor(QObject):
         """Process a single loaded PIL Image."""
         self.original_image = image.convert("RGB")
         self.log_requested.emit(f"Image loaded: {file_path if file_path else 'Memory'}")
-        
-        # Reset manual crop on new image
-        self.manual_crop_rect = None
+
+        # Preserve any existing manual crop rect across loads (e.g. repeated clipboard pastes).
+        # It will only be discarded if a resolution preset successfully overrides it.
+        prev_manual_rect = self.manual_crop_rect
 
         # --- Auto-apply resolution preset ---
-        self._auto_apply_resolution_preset()
+        preset_applied = self._auto_apply_resolution_preset()
+
+        # If no preset matched, keep the previous manual crop rect so the user
+        # doesn't have to re-draw the selection every time they paste a new image.
+        if not preset_applied:
+            self.manual_crop_rect = prev_manual_rect
+        else:
+            # A saved preset now governs the crop region; discard the manual rect
+            # so that perform_crop uses the preset values instead.
+            self.manual_crop_rect = None
 
         self.perform_crop()
 
-    def _auto_apply_resolution_preset(self) -> None:
+    def _auto_apply_resolution_preset(self) -> bool:
         """Check if a saved crop preset exists for the image resolution and auto-apply it.
-        
+
         - Exact resolution match is used when available.
         - Falls back to same aspect-ratio preset within 2% tolerance.
         - If no preset exists, logs a hint for the user.
+
+        Returns:
+            True if a preset was found and applied, False otherwise.
         """
         if self.original_image is None:
-            return
+            return False
 
         w, h = self.original_image.size
         preset = self.res_preset_mgr.find_best_preset(w, h)
@@ -175,11 +188,13 @@ class ImageProcessor(QObject):
                 f"L={preset['l']:.1f}% T={preset['t']:.1f}% "
                 f"W={preset['w']:.1f}% H={preset['h']:.1f}%"
             )
+            return True
         else:
             self.log_requested.emit(
                 f"[Auto Crop] No preset for {w}x{h}. "
                 "Drag to select the echo stats area, then click 'Save for this resolution'."
             )
+            return False
 
     def paste_from_clipboard(self) -> None:
         """Paste image from clipboard."""
@@ -227,39 +242,40 @@ class ImageProcessor(QObject):
 
         try:
             if app_config.crop_mode == "drag":
+                # In drag mode we ALWAYS display the full original image in the label
+                # so that the user's drag ratios (0.0-1.0 relative to the displayed
+                # pixmap) map correctly back to original-image pixel coordinates.
+                # Showing a previously-cropped thumbnail as the base would shift the
+                # coordinate origin on every successive drag.
+                self.image_updated.emit(self.original_image)
+
                 if self.manual_crop_rect:
                     w, h = self.original_image.size
                     l, t, r, b = self.manual_crop_rect
-                    # Convert ratios to pixels
-                    left = int(l * w)
-                    top = int(t * h)
-                    right = int(r * w)
-                    bottom = int(b * h)
-                    # Constraint
-                    left = max(0, min(w, left))
-                    top = max(0, min(h, top))
-                    right = max(0, min(w, right))
-                    bottom = max(0, min(h, bottom))
-                    
+                    # Ratios are 0.0-1.0 relative to the original image dimensions.
+                    left   = max(0, min(w, int(l * w)))
+                    top    = max(0, min(h, int(t * h)))
+                    right  = max(0, min(w, int(r * w)))
+                    bottom = max(0, min(h, int(b * h)))
+
                     if right > left and bottom > top:
                         self.loaded_image = self.original_image.crop((left, top, right, bottom))
-                        self.image_updated.emit(self.loaded_image)
-                        
+
                         # Log percentages for reproduction in "Percent" mode
-                        lp, tp, wp, hp = l * 100.0, t * 100.0, (r - l) * 100.0, (b - t) * 100.0
+                        lp = l * 100.0
+                        tp = t * 100.0
+                        wp = (r - l) * 100.0
+                        hp = (b - t) * 100.0
                         self.log_requested.emit(
                             f"Drag crop applied: Left={lp:.1f}% Top={tp:.1f}% Width={wp:.1f}% Height={hp:.1f}%"
                         )
-                        
+
                         self.run_ocr()
                     else:
-                        self.log_requested.emit("Invalid crop area.")
+                        self.log_requested.emit("Invalid crop area (zero or inverted selection).")
                 else:
-                    # If no crop set, show original mainly for selection
-                    self.loaded_image = self.original_image.copy()
-                    self.image_updated.emit(self.loaded_image)
-                    self.log_requested.emit("Drag mode: Please select an area to crop.")
-                
+                    self.log_requested.emit("Drag mode: Please drag to select the echo stats area.")
+
                 # IMPORTANT: Do NOT fall through to percent crop
                 return
 
