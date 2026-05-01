@@ -28,7 +28,6 @@ Supports automatic input via OCR, character-specific weighting presets, and mult
 - **5つの計算方式**: 正規化、比率重視、ロール品質、有効ステータス数、CV換算に対応。
 - **キャラクタープリセット**: 各キャラに合わせた有効ステータスと重み付け、参照ステータスを保存可能。
 - **装備自動ロード**: キャラクター切り替え時、空いているタブに「装備中」のエコーを自動で読み込みます。
-- **5列スコアボード生成**: 現在のビルドを横一列にまとめた画像を生成。スコア評価から「%」を除いた正確な指標を表示。
 - **リアルタイム設定反映**: 言語設定や文字色が、再起動なしでUI全体に即座に反映されます。
 - **安全なOCR**: 重複防止機能や、クロップ範囲の％指定による精密な読取設定が可能。
 
@@ -38,7 +37,6 @@ Supports automatic input via OCR, character-specific weighting presets, and mult
 - **5 Calculation Methods**: Supports Normalization, Ratio, Roll Quality, Effective Stats Count, and Crit Value (CV).
 - **Character Presets**: Save effective stats, weighting, and scaling stat (ATK/HP/DEF) for each character.
 - **Equipped Auto-Load**: Automatically loads equipped echoes into empty tabs when switching characters.
-- **5-Column Scoreboard**: Creates a summary image in a clean single-row layout. Removes misleading "%" from scores.
 - **Real-time Updates**: Language and appearance settings are applied instantly to the entire UI.
 - **Advanced OCR**: Features duplicate skipping to protect manual edits and conflict detection to prevent accidental overwrites.
 
